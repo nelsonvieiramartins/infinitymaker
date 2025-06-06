@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Administração - Infinity Maker</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="../index.html" class="logo">
+                    <i class="fas fa-infinity"></i> Infinity<span>Maker</span>
+                </a>
+                
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                
+                <ul class="nav-links">
+                    <li><a href="../index.html">Início</a></li>
+                    <li class="admin-link"><a href="dashboard.html" class="active">Dashboard</a></li>
+                    <li class="admin-link"><a href="users.html">Usuários</a></li>
+                    <li class="admin-link"><a href="images.html">Imagens</a></li>
+                    <li class="admin-link"><a href="settings.html">Configurações</a></li>
+                    <li><a href="#" onclick="logout(); return false;">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Conteúdo Principal -->
+    <main class="main">
+        <div class="container">
+            <div class="dashboard">
+                <aside class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li><a href="dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="users.html"><i class="fas fa-users"></i> Usuários</a></li>
+                        <li><a href="images.html"><i class="fas fa-images"></i> Imagens</a></li>
+                        <li><a href="stats.html"><i class="fas fa-chart-bar"></i> Estatísticas</a></li>
+                        <li><a href="api.html"><i class="fas fa-code"></i> API</a></li>
+                        <li><a href="settings.html"><i class="fas fa-cog"></i> Configurações</a></li>
+                        <li><a href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+                    </ul>
+                </aside>
+                
+                <div class="content-area">
+                    <div class="dashboard-header">
+                        <h2 class="dashboard-title">Dashboard</h2>
+                        <div class="date">
+                            <span id="current-date">06 de junho, 2025</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <h3>Total de Usuários</h3>
+                            <p class="value" id="stat-totalUsers">125</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Imagens Geradas</h3>
+                            <p class="value" id="stat-totalImages">1.872</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Usuários Ativos</h3>
+                            <p class="value" id="stat-activeUsers">45</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Chamadas de API</h3>
+                            <p class="value" id="stat-apiCalls">3.254</p>
+                        </div>
+                    </div>
+                    
+                    <div class="charts-container">
+                        <div class="chart-card">
+                            <h3>Atividade Recente</h3>
+                            <!-- Aqui você pode adicionar um gráfico com uma biblioteca como Chart.js -->
+                            <div class="chart-placeholder" style="height: 250px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                                <span>Dados do gráfico de atividade</span>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-card">
+                            <h3>Distribuição por Tipo de Imagem</h3>
+                            <!-- Aqui você pode adicionar um gráfico com uma biblioteca como Chart.js -->
+                            <div class="chart-placeholder" style="height: 250px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                                <span>Dados do gráfico de distribuição</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-activity">
+                        <div class="dashboard-header">
+                            <h3>Usuários Recentes</h3>
+                            <a href="users.html" class="btn btn-sm">Ver Todos</a>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nome</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                        <th>Data de Cadastro</th>
+                                        <th>Imagens</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dados da tabela serão carregados via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Rodapé -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Infinity Maker. Todos os direitos reservados. | Painel de Administração</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="../js/script.js"></script>
+</body>
+</html>

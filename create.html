@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Personagens Colecionáveis - Infinity Maker</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Incluir o cabeçalho padrão -->
+    <div id="header-placeholder"></div>
+    <script>
+        // Carregar o cabeçalho padrão
+        fetch('includes/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+            });
+    </script>
+    
+    <!-- Conteúdo Principal -->
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1>Crie seus personagens Colecionáveis</h1>
+                <p>Transforme suas fotos em personagens 3D estilizados. Faça upload de até 5 fotos e deixe nossa IA criar versões incríveis dos seus personagens no estilo colecionável!</p>
+            </section>
+            
+            <!-- Wizard Section -->
+            <section class="upload-section wizard-section" id="wizard-section">
+                <div class="wizard-container">
+                    <!-- Wizard Navigation -->
+                    <div class="wizard-nav">
+                        <div class="wizard-step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Upload de Fotos</div>
+                        </div>
+                        <div class="wizard-step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Personalização</div>
+                        </div>
+                        <div class="wizard-step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Modo de Criação</div>
+                        </div>
+                        <div class="wizard-step" data-step="4">
+                            <div class="step-number">4</div>
+                            <div class="step-title">Resultado</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Wizard Content -->
+                    <div class="wizard-content">
+                        <!-- Step 1: Upload de Fotos -->
+                        <div class="wizard-panel active" data-step="1">
+                            <h3>Upload de Fotos</h3>
+                            <p>Selecione até 5 fotos para transformar em personagens Disney Infinity.</p>
+                            
+                            <div class="upload-grid">
+                                <div class="upload-slot" id="upload-slot-1">
+                                    <div class="upload-area">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Arraste uma foto ou clique para selecionar</p>
+                                        <input type="file" class="file-input" accept="image/*">
+                                    </div>
+                                    <div class="image-preview" style="display: none;">
+                                        <img src="#" alt="Prévia">
+                                        <button class="remove-btn"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                                
+                                <div class="upload-slot" id="upload-slot-2">
+                                    <div class="upload-area">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Arraste uma foto ou clique para selecionar</p>
+                                        <input type="file" class="file-input" accept="image/*">
+                                    </div>
+                                    <div class="image-preview" style="display: none;">
+                                        <img src="#" alt="Prévia">
+                                        <button class="remove-btn"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                                
+                                <div class="upload-slot" id="upload-slot-3">
+                                    <div class="upload-area">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Arraste uma foto ou clique para selecionar</p>
+                                        <input type="file" class="file-input" accept="image/*">
+                                    </div>
+                                    <div class="image-preview" style="display: none;">
+                                        <img src="#" alt="Prévia">
+                                        <button class="remove-btn"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                                
+                                <div class="upload-slot" id="upload-slot-4">
+                                    <div class="upload-area">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Arraste uma foto ou clique para selecionar</p>
+                                        <input type="file" class="file-input" accept="image/*">
+                                    </div>
+                                    <div class="image-preview" style="display: none;">
+                                        <img src="#" alt="Prévia">
+                                        <button class="remove-btn"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                                
+                                <div class="upload-slot" id="upload-slot-5">
+                                    <div class="upload-area">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Arraste uma foto ou clique para selecionar</p>
+                                        <input type="file" class="file-input" accept="image/*">
+                                    </div>
+                                    <div class="image-preview" style="display: none;">
+                                        <img src="#" alt="Prévia">
+                                        <button class="remove-btn"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="wizard-tips">
+                                <h4><i class="fas fa-lightbulb"></i> Dicas para melhores resultados:</h4>
+                                <ul>
+                                    <li>Use fotos com boa iluminação e resolução</li>
+                                    <li>Escolha imagens onde o rosto está claramente visível</li>
+                                    <li>Evite fotos com múltiplas pessoas (uma pessoa por foto)</li>
+                                    <li>Formatos suportados: JPG, PNG, WEBP (máx. 5MB cada)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- O passo de escolha de estilos foi removido, pulando direto para a personalização -->
+                        
+                        <!-- Step 2: Personalização (anteriormente Passo 3) -->
+                        <div class="wizard-panel" data-step="2">
+                            <h3>Personalização</h3>
+                            <p>Adicione detalhes e personalizações a cada personagem.</p>
+                            
+                            <div class="customization-container">
+                                <!-- Os slots de personalização serão adicionados dinamicamente via JavaScript -->
+                            </div>
+                            
+                            <div class="customization-options">
+                                <h4>Sugestões de Personalização:</h4>
+                                <div class="suggestion-tags">
+                                    <span class="suggestion-tag" data-suggestion="chapéu de aventureiro">Chapéu de Aventureiro</span>
+                                    <span class="suggestion-tag" data-suggestion="espada mágica">Espada Mágica</span>
+                                    <span class="suggestion-tag" data-suggestion="capa de super-herói">Capa de Super-herói</span>
+                                    <span class="suggestion-tag" data-suggestion="armadura brilhante">Armadura Brilhante</span>
+                                    <span class="suggestion-tag" data-suggestion="varinha mágica">Varinha Mágica</span>
+                                    <span class="suggestion-tag" data-suggestion="escudo de proteção">Escudo de Proteção</span>
+                                    <span class="suggestion-tag" data-suggestion="asas de fada">Asas de Fada</span>
+                                    <span class="suggestion-tag" data-suggestion="cabelo colorido">Cabelo Colorido</span>
+                                    <span class="suggestion-tag" data-suggestion="roupa de pirata">Roupa de Pirata</span>
+                                    <span class="suggestion-tag" data-suggestion="coroa real">Coroa Real</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: Modo de Criação (anteriormente Passo 4) -->
+                        <div class="wizard-panel" data-step="3">
+                            <h3>Modo de Criação</h3>
+                            <p>Escolha como você deseja criar seus personagens Disney Infinity.</p>
+                            
+                            <div class="creation-modes">
+                                <div class="creation-mode" id="individual-mode">
+                                    <div class="mode-icon">
+                                        <i class="fas fa-user-friends"></i>
+                                    </div>
+                                    <h4>Modo Individual</h4>
+                                    <p>Transforma cada foto em um personagem Disney Infinity separado.</p>
+                                    <ul>
+                                        <li>Um personagem para cada foto</li>
+                                        <li>Personalização individual</li>
+                                        <li>Resultados separados</li>
+                                    </ul>
+                                    <div class="mode-preview">
+                                        <img src="https://public.youware.com/users-website-assets/prod/1a438276-778a-4875-844d-32b322bf37c0/ga1b4b3c672e044cff52b6095da75425f357b6917fddb53a16db2fbd8cf529f5537030b4ef081dbe994c71c37db3d8b428da5d1d9e294af86faa7c6940985a5ab_640.jpg" alt="Modo Individual">
+                                    </div>
+                                </div>
+                                
+                                <div class="creation-mode active" id="combined-mode">
+                                    <div class="mode-icon">
+                                        <i class="fas fa-object-group"></i>
+                                    </div>
+                                    <h4>Modo Combinado</h4>
+                                    <p>Utiliza todas as fotos como referência para criar uma única imagem combinada.</p>
+                                    <ul>
+                                        <li>Personagens na mesma cena</li>
+                                        <li>Interação entre personagens</li>
+                                        <li>Composição artística unificada</li>
+                                    </ul>
+                                    <div class="mode-preview">
+                                        <img src="https://public.youware.com/users-website-assets/prod/1a438276-778a-4875-844d-32b322bf37c0/g891a0f439ca4192d6798b35b5761e7e8e2b8bffd6e940e1cdb3c40c7a8cd0bc53da790ad016998acc18a95a0b5fe796c98a0645136924f806623efac81321226_640.jpg" alt="Modo Combinado">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="combined-settings" id="combined-settings">
+                                <h4>Configurações da Cena Combinada</h4>
+                                <div class="setting-group">
+                                    <label for="scene-description">Descrição da Cena:</label>
+                                    <textarea id="scene-description" class="form-control" placeholder="Descreva como você quer que os personagens apareçam juntos (ex: em uma aventura na floresta, lutando contra vilões, etc.)">Uma cena com todos os personagens juntos em estilo Disney Infinity, interagindo como um grupo de heróis.</textarea>
+                                </div>
+                                <!-- A seleção de estilo foi removida, usando estilo padrão -->
+                            </div>
+                        </div>
+                        
+                        <!-- Step 4: Resultado (anteriormente Passo 5) -->
+                        <div class="wizard-panel" data-step="4">
+                            <h3 id="result-title">Seus Personagens Disney Infinity</h3>
+                            <div class="loading-container">
+                                <div class="loading-spinner"></div>
+                                <p id="loading-message">Criando seus personagens Disney Infinity...</p>
+                                <div class="progress-bar">
+                                    <div class="progress-fill"></div>
+                                </div>
+                                <p class="progress-text" id="progress-text">Processando imagem 1 de 5...</p>
+                            </div>
+                            
+                            <div class="results-container" style="display: none;">
+                                <!-- Os resultados serão adicionados dinamicamente via JavaScript -->
+                            </div>
+                            
+                            <div class="combined-result-container" style="display: none;">
+                                <div class="combined-image-container">
+                                    <img src="#" alt="Personagens Combinados" id="combined-image">
+                                </div>
+                                <div class="combined-image-info">
+                                    <h4>Personagens Combinados</h4>
+                                    <p id="combined-description">Uma cena combinada com todos os personagens em estilo Disney Infinity.</p>
+                                </div>
+                                <div class="combined-actions">
+                                    <button class="btn" id="download-combined-btn">
+                                        <i class="fas fa-download"></i> Baixar Imagem
+                                    </button>
+                                    <button class="btn" id="share-combined-btn">
+                                        <i class="fas fa-share-alt"></i> Compartilhar
+                                    </button>
+                                    <button class="btn btn-outline" id="create-more-combined-btn">
+                                        <i class="fas fa-plus"></i> Criar Mais Personagens
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="share-all-container" style="display: none;">
+                                <button class="btn" id="download-all-btn">
+                                    <i class="fas fa-download"></i> Baixar Todos
+                                </button>
+                                <button class="btn" id="share-all-btn">
+                                    <i class="fas fa-share-alt"></i> Compartilhar Todos
+                                </button>
+                                <button class="btn btn-outline" id="create-more-btn">
+                                    <i class="fas fa-plus"></i> Criar Mais Personagens
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Wizard Navigation Buttons -->
+                    <div class="wizard-buttons">
+                        <button class="btn btn-outline" id="prev-btn" disabled>
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                        <button class="btn" id="next-btn">
+                            Próximo <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button class="btn" id="generate-btn" style="display: none;">
+                            Gerar Personagens <i class="fas fa-magic"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Rodapé -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Infinity Maker</h3>
+                    <p>Transforme suas fotos em personagens 3D no estilo Disney Infinity com o poder da inteligência artificial.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Recursos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Transformação de Fotos</a></li>
+                        <li><a href="#">Personalização</a></li>
+                        <li><a href="#">Criação Combinada</a></li>
+                        <li><a href="#">Impressão 3D</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Empresa</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Carreiras</a></li>
+                        <li><a href="#">Contato</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Suporte</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Ajuda</a></li>
+                        <li><a href="#">Termos de Serviço</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Infinity Maker. Todos os direitos reservados.</p>
+                <p class="disclaimer">Disney Infinity é uma marca registrada da Disney. Este serviço não é afiliado ou endossado pela Disney.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="js/api-mock.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/wizard.js"></script>
+    <script src="js/header.js"></script>
+</body>
+</html>

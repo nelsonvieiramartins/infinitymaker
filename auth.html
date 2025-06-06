@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar ou Cadastrar - Infinity Maker</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Firebase -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js"></script>
+    <style>
+        /* Estilos específicos para a página de autenticação */
+        .auth-page {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        .auth-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .auth-sidebar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-sidebar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+            z-index: 0;
+        }
+
+        .auth-sidebar-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-sidebar h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .auth-sidebar p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .auth-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .auth-features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .auth-features li i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+
+        .auth-main {
+            padding: 3rem 2rem;
+            width: 60%;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .auth-tab {
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .auth-tab.active {
+            color: var(--primary-color);
+        }
+
+        .auth-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .auth-content {
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .auth-content.active {
+            display: block;
+        }
+
+        .auth-form {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(75, 0, 130, 0.1);
+            outline: none;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox input {
+            margin-right: 8px;
+        }
+
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-left: auto;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(75, 0, 130, 0.3);
+        }
+
+        .social-auth {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .social-auth p {
+            color: #666;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .social-auth p::before,
+        .social-auth p::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: #ddd;
+        }
+
+        .social-auth p::before {
+            left: 0;
+        }
+
+        .social-auth p::after {
+            right: 0;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn i {
+            margin-right: 8px;
+        }
+
+        .social-btn.google-btn {
+            color: #DB4437;
+        }
+
+        .social-btn.facebook-btn {
+            color: #4267B2;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .auth-card {
+                flex-direction: column;
+                max-width: 450px;
+            }
+
+            .auth-sidebar, .auth-main {
+                width: 100%;
+            }
+
+            .auth-sidebar {
+                padding: 2rem;
+                text-align: center;
+            }
+
+            .auth-features li {
+                justify-content: center;
+            }
+
+            .auth-main {
+                padding: 2rem;
+            }
+        }
+        
+        /* Estilos para indicadores de carregamento e mensagens */
+        .auth-message {
+            padding: 12px 15px;
+            margin: 10px 0 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .auth-message-success {
+            background-color: rgba(38, 203, 124, 0.1);
+            color: #26cb7c;
+            border: 1px solid rgba(38, 203, 124, 0.2);
+        }
+        
+        .auth-message-error {
+            background-color: rgba(240, 52, 52, 0.1);
+            color: #f03434;
+            border: 1px solid rgba(240, 52, 52, 0.2);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fa-spin {
+            animation: fa-spin 2s infinite linear;
+        }
+        
+        @keyframes fa-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Incluir o cabeçalho padrão -->
+    <div id="header-placeholder"></div>
+    <script>
+        // Carregar o cabeçalho padrão
+        fetch('includes/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+            });
+    </script>
+    
+    <!-- Conteúdo Principal -->
+    <main class="auth-page">
+        <div class="auth-card">
+            <div class="auth-sidebar">
+                <div class="auth-sidebar-content">
+                    <h2>Infinity Maker</h2>
+                    <p>Crie imagens incríveis com o poder da inteligência artificial. Entre ou cadastre-se para começar sua jornada criativa.</p>
+                    <ul class="auth-features">
+                        <li><i class="fas fa-star"></i> Geração de imagens personalizadas</li>
+                        <li><i class="fas fa-magic"></i> Estilos artísticos variados</li>
+                        <li><i class="fas fa-cloud-upload-alt"></i> Armazenamento na nuvem</li>
+                        <li><i class="fas fa-share-alt"></i> Compartilhe com facilidade</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="auth-main">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" data-tab="login">Entrar</div>
+                    <div class="auth-tab" data-tab="register">Cadastrar</div>
+                </div>
+                
+                <!-- Área para mensagens de erro ou sucesso -->
+                <div id="auth-messages"></div>
+                
+                <!-- Formulário de Login -->
+                <div class="auth-content active" id="login-content">
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" class="form-control" placeholder="Seu email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="login-password">Senha</label>
+                            <input type="password" id="login-password" class="form-control" placeholder="Sua senha" required>
+                        </div>
+                        
+                        <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div class="checkbox">
+                                <input type="checkbox" id="remember-me">
+                                <label for="remember-me">Lembrar de mim</label>
+                            </div>
+                            <a href="reset-password.html" class="forgot-password">Esqueceu a senha?</a>
+                        </div>
+                        
+                        <button type="submit" class="auth-btn">Entrar</button>
+                    </form>
+                    
+                    <div class="social-auth">
+                        <p>Ou entre com</p>
+                        <div class="social-buttons">
+                            <button id="google-login-btn" class="social-btn google-btn">
+                                <i class="fab fa-google"></i> Google
+                            </button>
+                            <button class="social-btn facebook-btn">
+                                <i class="fab fa-facebook-f"></i> Facebook
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Formulário de Cadastro -->
+                <div class="auth-content" id="register-content">
+                    <form id="register-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="register-name">Nome Completo</label>
+                            <input type="text" id="register-name" class="form-control" placeholder="Seu nome completo" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="register-email">Email</label>
+                            <input type="email" id="register-email" class="form-control" placeholder="Seu melhor email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="register-password">Senha</label>
+                            <input type="password" id="register-password" class="form-control" placeholder="Crie uma senha forte" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="register-password-confirm">Confirmar Senha</label>
+                            <input type="password" id="register-password-confirm" class="form-control" placeholder="Confirme sua senha" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="terms" required>
+                                <label for="terms">Eu concordo com os <a href="terms.html">Termos de Serviço</a> e <a href="privacy.html">Política de Privacidade</a></label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="auth-btn">Criar Conta</button>
+                    </form>
+                    
+                    <div class="social-auth">
+                        <p>Ou cadastre-se com</p>
+                        <div class="social-buttons">
+                            <button id="google-signup-btn" class="social-btn google-btn">
+                                <i class="fab fa-google"></i> Google
+                            </button>
+                            <button class="social-btn facebook-btn">
+                                <i class="fab fa-facebook-f"></i> Facebook
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+    <script src="js/header.js"></script>
+    <script type="module" src="js/firebase/troubleshoot.js"></script>
+    <script type="module">
+        // Importar módulos Firebase
+        import { app, auth } from './js/firebase/config.js';
+        import { initAuthUI } from './js/firebase/ui.js';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const contents = document.querySelectorAll('.auth-content');
+            
+            // Função para alternar entre abas
+            function switchTab(tabName) {
+                // Ativar a aba correta
+                tabs.forEach(t => {
+                    t.classList.toggle('active', t.dataset.tab === tabName);
+                });
+                
+                // Mostrar o conteúdo correspondente com uma animação suave
+                contents.forEach(content => {
+                    if (content.id === `${tabName}-content`) {
+                        content.style.opacity = '0';
+                        content.classList.add('active');
+                        setTimeout(() => {
+                            content.style.opacity = '1';
+                        }, 50);
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+                
+                // Atualizar a URL com hash
+                history.replaceState(null, null, tabName === 'login' ? '#login' : '#register');
+            }
+            
+            // Configurar event listeners para as abas
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    switchTab(tab.dataset.tab);
+                });
+            });
+            
+            // Verificar se há um hash na URL para selecionar a aba correta
+            if (window.location.hash === '#register') {
+                switchTab('register');
+            } else {
+                switchTab('login');
+            }
+            
+            // Verificar se há um erro ou mensagem na URL
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('error')) {
+                const errorMessage = urlParams.get('error');
+                
+                // Criar elemento de erro visível para o usuário
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'auth-message auth-message-error';
+                errorDiv.style.display = 'block';
+                errorDiv.textContent = decodeURIComponent(errorMessage);
+                
+                // Adicionar à página
+                const authMessagesElement = document.getElementById('auth-messages');
+                if (authMessagesElement) {
+                    authMessagesElement.appendChild(errorDiv);
+                }
+                
+                // Remover o parâmetro da URL
+                history.replaceState(null, null, window.location.pathname + window.location.hash);
+            }
+            
+            // Inicializar a autenticação do Firebase com tratamento de erros aprimorado
+            try {
+                console.log('Inicializando autenticação Firebase...');
+                console.log('Firebase inicializado?', !!app);
+                console.log('Auth inicializado?', !!auth);
+                
+                // Verificar se o Firebase está carregado corretamente
+                if (!app || !auth) {
+                    throw new Error('Firebase não foi inicializado corretamente');
+                }
+                
+                initAuthUI().catch(error => {
+                    console.error('Erro ao inicializar autenticação:', error);
+                    
+                    // Criar elemento de erro visível para o usuário
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'auth-message auth-message-error';
+                    errorDiv.style.display = 'block';
+                    errorDiv.textContent = 'Erro ao carregar sistema de autenticação. Por favor, tente novamente mais tarde.';
+                    
+                    // Adicionar à página
+                    const authMessagesElement = document.getElementById('auth-messages');
+                    if (authMessagesElement) {
+                        authMessagesElement.appendChild(errorDiv);
+                    }
+                });
+            } catch (error) {
+                console.error('Erro crítico ao inicializar Firebase:', error);
+                
+                // Mostrar erro
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'auth-message auth-message-error';
+                errorDiv.style.display = 'block';
+                errorDiv.textContent = 'Erro crítico ao inicializar Firebase: ' + error.message;
+                
+                // Adicionar à página
+                const authMessagesElement = document.getElementById('auth-messages');
+                if (authMessagesElement) {
+                    authMessagesElement.appendChild(errorDiv);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

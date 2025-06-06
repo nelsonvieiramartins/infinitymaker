@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Firebase - Infinity Maker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status-ok { color: #28a745; }
+        .status-error { color: #dc3545; }
+        .status-warning { color: #ffc107; }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover { background: #0056b3; }
+        .result-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .config-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Debug Firebase Authentication</h1>
+        
+        <div class="config-section">
+            <h2>Informações do Ambiente</h2>
+            <p><strong>Domínio:</strong> <span id="domain"></span></p>
+            <p><strong>Protocolo:</strong> <span id="protocol"></span></p>
+            <p><strong>URL Completa:</strong> <span id="fullUrl"></span></p>
+            <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
+        </div>
+
+        <div class="config-section">
+            <h2>Status do Firebase</h2>
+            <p><strong>Firebase Carregado:</strong> <span id="firebaseStatus"></span></p>
+            <p><strong>Auth Inicializado:</strong> <span id="authStatus"></span></p>
+            <p><strong>API Key:</strong> <span id="apiKeyStatus"></span></p>
+            <p><strong>Auth Domain:</strong> <span id="authDomainStatus"></span></p>
+            <p><strong>Project ID:</strong> <span id="projectIdStatus"></span></p>
+        </div>
+
+        <div class="config-section">
+            <h2>Testes de Autenticação</h2>
+            <button class="test-button" onclick="testBasicConfig()">Testar Configuração Básica</button>
+            <button class="test-button" onclick="testGoogleProvider()">Testar Provider Google</button>
+            <button class="test-button" onclick="testGoogleLogin()">Testar Login Google</button>
+            <button class="test-button" onclick="showRawConfig()">Mostrar Configuração Raw</button>
+        </div>
+
+        <div class="config-section">
+            <h2>Resultados dos Testes</h2>
+            <div id="testResults" class="result-box">
+                Clique nos botões acima para executar os testes...
+            </div>
+        </div>
+
+        <div class="config-section">
+            <h2>Instruções de Correção</h2>
+            <div id="instructions">
+                <h3>⚠️ Se o login com Google não funcionar:</h3>
+                <ol>
+                    <li><strong>Firebase Console:</strong> Acesse console.firebase.google.com</li>
+                    <li><strong>Projeto:</strong> Selecione o projeto "infinitymaker-c307d"</li>
+                    <li><strong>Authentication:</strong> Vá em Authentication → Sign-in method</li>
+                    <li><strong>Google:</strong> Certifique-se de que o provedor Google está habilitado</li>
+                    <li><strong>Domínios Autorizados:</strong> Adicione este domínio (<span id="currentDomain"></span>) à lista de domínios autorizados</li>
+                    <li><strong>OAuth:</strong> No Google Cloud Console, configure o OAuth com este domínio</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { app, auth } from './js/firebase/config.js';
+        import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
+        // Preencher informações do ambiente
+        document.getElementById('domain').textContent = window.location.hostname;
+        document.getElementById('protocol').textContent = window.location.protocol;
+        document.getElementById('fullUrl').textContent = window.location.href;
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+        document.getElementById('currentDomain').textContent = window.location.hostname;
+
+        // Verificar status do Firebase
+        function updateFirebaseStatus() {
+            try {
+                // Firebase básico
+                const firebaseLoaded = typeof app !== 'undefined' && app !== null;
+                document.getElementById('firebaseStatus').innerHTML = firebaseLoaded ? 
+                    '<span class="status-ok">✅ OK</span>' : '<span class="status-error">❌ Erro</span>';
+
+                // Auth
+                const authLoaded = typeof auth !== 'undefined' && auth !== null;
+                document.getElementById('authStatus').innerHTML = authLoaded ? 
+                    '<span class="status-ok">✅ OK</span>' : '<span class="status-error">❌ Erro</span>';
+
+                if (authLoaded && auth.app && auth.app.options) {
+                    const config = auth.app.options;
+                    
+                    // API Key
+                    document.getElementById('apiKeyStatus').innerHTML = config.apiKey ? 
+                        '<span class="status-ok">✅ Configurado</span>' : '<span class="status-error">❌ Faltando</span>';
+                    
+                    // Auth Domain
+                    document.getElementById('authDomainStatus').innerHTML = config.authDomain ? 
+                        `<span class="status-ok">✅ ${config.authDomain}</span>` : '<span class="status-error">❌ Faltando</span>';
+                    
+                    // Project ID
+                    document.getElementById('projectIdStatus').innerHTML = config.projectId ? 
+                        `<span class="status-ok">✅ ${config.projectId}</span>` : '<span class="status-error">❌ Faltando</span>';
+                } else {
+                    document.getElementById('apiKeyStatus').innerHTML = '<span class="status-error">❌ Não disponível</span>';
+                    document.getElementById('authDomainStatus').innerHTML = '<span class="status-error">❌ Não disponível</span>';
+                    document.getElementById('projectIdStatus').innerHTML = '<span class="status-error">❌ Não disponível</span>';
+                }
+            } catch (error) {
+                console.error('Erro ao verificar status do Firebase:', error);
+            }
+        }
+
+        // Função para exibir resultados
+        function showResult(message) {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.textContent = message;
+        }
+
+        // Testes globais
+        window.testBasicConfig = () => {
+            try {
+                const result = {
+                    timestamp: new Date().toISOString(),
+                    firebaseApp: !!app,
+                    firebaseAuth: !!auth,
+                    config: auth?.app?.options || 'Não disponível',
+                    domain: window.location.hostname,
+                    protocol: window.location.protocol,
+                    secure: window.location.protocol === 'https:' || window.location.hostname === 'localhost'
+                };
+                
+                showResult(JSON.stringify(result, null, 2));
+            } catch (error) {
+                showResult('Erro no teste básico: ' + error.message);
+            }
+        };
+
+        window.testGoogleProvider = () => {
+            try {
+                const provider = new GoogleAuthProvider();
+                provider.addScope('email');
+                provider.addScope('profile');
+                
+                const result = {
+                    timestamp: new Date().toISOString(),
+                    providerCreated: !!provider,
+                    providerId: provider.providerId,
+                    scopes: provider.scopes || [],
+                    customParameters: provider.customParameters || {}
+                };
+                
+                showResult('Provider Google criado com sucesso:\n' + JSON.stringify(result, null, 2));
+            } catch (error) {
+                showResult('Erro ao criar provider Google: ' + error.message);
+            }
+        };
+
+        window.testGoogleLogin = async () => {
+            try {
+                showResult('Iniciando teste de login com Google...\nEsta operação abrirá um popup.');
+                
+                const provider = new GoogleAuthProvider();
+                provider.addScope('email');
+                provider.addScope('profile');
+                provider.setCustomParameters({
+                    prompt: 'select_account'
+                });
+                
+                const result = await signInWithPopup(auth, provider);
+                
+                const testResult = {
+                    success: true,
+                    timestamp: new Date().toISOString(),
+                    user: {
+                        uid: result.user.uid,
+                        email: result.user.email,
+                        displayName: result.user.displayName,
+                        photoURL: result.user.photoURL
+                    }
+                };
+                
+                showResult('✅ LOGIN GOOGLE BEM-SUCEDIDO!\n' + JSON.stringify(testResult, null, 2));
+            } catch (error) {
+                const errorResult = {
+                    success: false,
+                    timestamp: new Date().toISOString(),
+                    error: {
+                        code: error.code,
+                        message: error.message
+                    },
+                    possibleSolutions: []
+                };
+
+                if (error.code === 'auth/unauthorized-domain') {
+                    errorResult.possibleSolutions.push('Adicionar este domínio às origens autorizadas no Firebase Console');
+                } else if (error.code === 'auth/operation-not-allowed') {
+                    errorResult.possibleSolutions.push('Habilitar a autenticação Google no Firebase Console');
+                } else if (error.code === 'auth/popup-blocked') {
+                    errorResult.possibleSolutions.push('Permitir popups para este site');
+                }
+
+                showResult('❌ ERRO NO LOGIN GOOGLE:\n' + JSON.stringify(errorResult, null, 2));
+            }
+        };
+
+        window.showRawConfig = () => {
+            try {
+                const config = auth?.app?.options;
+                if (config) {
+                    showResult('Configuração Firebase (raw):\n' + JSON.stringify(config, null, 2));
+                } else {
+                    showResult('Configuração não disponível');
+                }
+            } catch (error) {
+                showResult('Erro ao obter configuração: ' + error.message);
+            }
+        };
+
+        // Atualizar status quando a página carrega
+        updateFirebaseStatus();
+    </script>
+</body>
+</html>
